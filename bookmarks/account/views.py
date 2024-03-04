@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login,logout
 from .forms import LoginForm
+from django.contrib.auth.decorators import login_required
 
 def user_login(request):
     if request.method == "POST":
@@ -19,6 +20,10 @@ def user_login(request):
                     return HttpResponse('Disabled account')
             else:
                 return HttpResponse('Invalid login')
-        else:
-            form = LoginForm()
-        return render(request,'account/login.html',{'form':form})
+    else:
+        form = LoginForm()
+    return render(request,'account/login.html',{'form':form})
+
+@login_required
+def dashboard(request):
+    return render(request,'account/dashboard.html',{'section': 'dashboard'})
